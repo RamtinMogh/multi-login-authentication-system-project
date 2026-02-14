@@ -29,9 +29,43 @@ sudo realm join bigguy.corp --user=Administrator
 ```
 Enter the domain admin password when prompted
 
+
+
 Verify the domain join was successful:
 
 ```bash
 realm list
 id Administrator@bigguy.corp
 ```
+
+Restart SSSD to apply changes:
+
+```bash
+sudo systemctl restart sssd
+```
+
+Enable automatic home directory creation on first login (recommended):
+```bash
+sudo pam-auth-update --enable mkhomedir
+```
+
+
+
+## Step 3: Configure SSSD for Authentication and Identity
+Edit /etc/sssd/sssd.conf (use sudo nano /etc/sssd/sssd.conf):
+
+```ini
+[sssd]
+domains = bigguy.corp
+config_file_version = 2
+services = nss, pam
+
+[domain/bigguy.corp]
+id_provider = ad
+auth_provider = ad
+access_provider = ad
+cache_credentials = True
+krb5_realm = BIGGUY.CORP
+realmd_tags = manages-system joined-with-adcli
+fallback_homedir = /home/%u@%d
+use_fully_qualified_names = True
