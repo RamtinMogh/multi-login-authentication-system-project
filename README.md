@@ -1,6 +1,6 @@
 # Multi-Login Authentication System (AD DS + SSSD)
 
-**Centralized authentication for hybrid Windows/Linux environments** — Enables seamless logins, user/group management, and permissions across Windows Server 2019 and Linux Mint using Active Directory Domain Services (AD DS) and System Security Services Daemon (SSSD). Built as a Seneca College project.
+**Centralized authentication for hybrid Windows/Linux environments** — Enables seamless logins, user/group management, and permissions across Windows Server 2019 and Linux Mint using Active Directory Domain Services (AD DS) and System Security Services Daemon (SSSD). Built as a project.
 
 This repo documents the full setup for domain-joining Linux clients to a Windows AD domain.
 
