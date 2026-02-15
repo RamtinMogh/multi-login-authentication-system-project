@@ -59,3 +59,57 @@ Join the domain:
 ```bash
 sudo realm join -U Administrator bigguy.local
 ```
+
+Configure /etc/sssd/sssd.conf:
+```ini
+[sssd]
+domains = bigguy.local
+config_file_version = 2
+services = nss, pam, pac
+
+[domain/bigguy.local]
+ad_domain = bigguy.local
+krb5_realm = BIGGUY.LOCAL
+realmd_tags = manages-system joined-with-adcli
+id_provider = ad
+access_provider = simple
+ad_access_filter = (memberOf=CN=Domain Users,CN=Users,DC=bigguy,DC=local)
+cache_credentials = True
+default_shell = /bin/bash
+fallback_homedir = /home/%u@%d
+use_fully_qualified_names = True
+ldap_id_mapping = True
+krb5_store_password_if_offline = True
+simple_allow_users = shareduser@bigguy.local, restricteduser1@bigguy.local
+debug_level = 9
+```
+
+Save and exit the editor.
+
+Note: For Linux Mint 2 (selective access), do not include restricteduser1@bigguy.local in simple_allow_users.
+
+Edit /etc/lightdm/lightdm.conf:
+```ini
+[Seat:*]
+greeter-session=lightdm-gtk-greeter
+user-session=linuxmint
+greeter-show-manual-login=true
+allow-guest=false
+allow-user-switching=true
+```
+
+Restart services:
+```bash
+sudo systemctl restart sssd
+sudo systemctl restart lightdm
+```
+
+Test login with shareduser@bigguy.local
+
+Confirm AD account:
+```bash
+klist
+whoami
+```
+
+Test password change: Change in ADUC on DC, verify on clients.
