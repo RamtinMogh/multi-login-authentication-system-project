@@ -123,6 +123,7 @@ Set to Host-only networking:
 - DNS: 192.168.100.10
 
 System properties → Computer name → Change → Select domain: bigguy.local
+
 Provide Administrator credentials
 
 Restart to apply changes
