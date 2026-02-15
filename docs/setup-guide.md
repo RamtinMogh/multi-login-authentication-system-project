@@ -27,3 +27,5 @@ Promote to domain controller:
 
 After reboot, open Active Directory Users and Computers (ADUC):
 - Create users: shareduser, restricteduser1
+- shareduser : granted login access to all clients
+- restricteduser1: configured for selective access
