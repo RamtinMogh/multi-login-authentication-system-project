@@ -113,3 +113,39 @@ whoami
 ```
 
 Test password change: Change in ADUC on DC, verify on clients.
+
+
+## Step 3: Windows 10 Client Setup
+Set to Host-only networking:
+- IP address: 192.168.100.20
+- Subnet Mask: 255.255.255.0
+- Default Gateway: 192.168.100.10
+- DNS: 192.168.100.10
+
+System properties → Computer name → Change → Select domain: bigguy.local
+Provide Administrator credentials
+
+Restart to apply changes
+
+Login with BIGGUY\shareduser
+
+Disable cached credentials (in admin command prompt or PowerShell):
+
+```powershell
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v CachedLogonsCount /t REG_SZ /d 0 /f
+```
+
+
+## Verification Steps
+- AD users can log in to Linux Mint and Windows 10 with domain credentials
+- Groups and selective access work (e.g., restricteduser1 denied on Mint 2)
+- Kerberos tickets issued (klist)
+- Password changes sync across clients
+- DNS resolving correctly on Linux (nslookup bigguy.local)
+
+## Additional Notes
+- Firewall: Allow necessary ports if needed
+- Troubleshooting: Check SSSD debug logs (debug_level = 9 in sssd.conf)
+- No proprietary tools used on Linux side
+
+See full original proposal: [BigGuy Corp Multi-Login Authentication Proposal](../docs/BigGuy-Corp-Authentication-Proposal.pdf)
