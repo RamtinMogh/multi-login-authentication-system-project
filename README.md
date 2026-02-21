@@ -1,46 +1,43 @@
 # Multi-Login Authentication System (AD DS + SSSD)
 
-**Centralized authentication for hybrid Windows/Linux environments** — Enables seamless logins, user/group management, and permissions across Windows Server 2019 and Linux Mint using Active Directory Domain Services (AD DS) and System Security Services Daemon (SSSD). Built as a Seneca College project to provide enterprise-level identity management.
+**Problem**: In real enterprise environments, companies use Windows Active Directory (AD) for centralized user management, logins, and permissions. But Linux systems (like servers or workstations) don't natively integrate with AD — they can't log in with domain credentials, access shared resources, or respect AD permissions without complex manual workarounds or expensive third-party tools.
 
-[![Windows Server](https://img.shields.io/badge/Windows_Server-2019-blue?logo=windows)](https://learn.microsoft.com/en-us/windows-server/)
+**Solution**: This project builds a complete hybrid authentication system that lets Linux Mint clients seamlessly log in with Active Directory credentials from a Windows Server 2019 domain controller, using open-source SSSD for domain join, Kerberos authentication, and LDAP identity lookup. It supports single sign-on (SSO), selective access (e.g., certain users denied on one client), password sync, and permission mapping — all in a virtual lab.
+
+Built as a Seneca College project to solve the exact problem of "Linux can't log in to Windows AD domain" without proprietary software.
+
+[![Windows Server 2019](https://img.shields.io/badge/Windows_Server-2019-blue?logo=windows)](https://learn.microsoft.com/en-us/windows-server/)
 [![Linux Mint](https://img.shields.io/badge/Linux-Mint-green?logo=linux)](https://linuxmint.com/)
-[![AD DS](https://img.shields.io/badge/AD_DS-Active_Directory-red)](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/)
+[![Active Directory](https://img.shields.io/badge/AD_DS-Active_Directory-red)](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/)
 [![SSSD](https://img.shields.io/badge/SSSD-System_Security-yellow)](https://sssd.io/)
 [![VMware](https://img.shields.io/badge/VMware-Workstation-blue)](https://www.vmware.com/products/workstation-pro.html)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Overview
-This project implements a multi-login authentication system for BigGuy Corp's mixed OS environment:
-- Windows Server 2019 as domain controller with AD DS for centralized user/group management
-- Linux Mint clients joined to the domain using SSSD for Kerberos authentication and LDAP identity lookup
-- Windows 10 clients also joined to the domain
-- Supports single sign-on (SSO), NTFS/share permissions synced to Linux, and selective access
-- Zero-cost, fully functional in a virtual lab
+## What the Project Solves
+Many organizations run mixed Windows/Linux environments but struggle with identity management:
+- Windows users log in with AD credentials → fine
+- Linux users need separate local accounts → inefficient, insecure, no SSO
+- AD permissions don't apply to Linux → access control breaks
 
-Full project proposal: [BigGuy Corp Multi-Login Authentication Proposal](docs/BigGuy-Corp-Authentication-Proposal.pdf)
-
-## Goals
-- Enable centralized user authentication across Windows and Linux
-- Allow seamless logins from Linux Mint clients using AD credentials
-- Manage users/groups/permissions from one place (AD DS)
-- Demonstrate secure authentication (Kerberos) and identity lookup (LDAP)
-- Map permissions and access controls (NTFS/share to Linux)
-- Test password changes and selective access
+This project fixes that by joining Linux Mint clients to a Windows AD domain using SSSD, so:
+- Users log in with the same AD username/password on both OSes
+- Groups and permissions are respected
+- Password changes sync instantly
+- Selective access is possible (e.g., some users blocked on specific clients)
 
 ## Technologies Used
-- Windows Server 2019 — AD DS, DNS, DHCP, GPO
+- Windows Server 2019 — AD DS, DNS, DHCP
 - Linux Mint — SSSD, realmd, Kerberos, PAM
-- VMware Workstation — virtual lab (domain controller, clients)
-- Kerberos — Secure ticket-based authentication
-- LDAP — Identity lookup
+- VMware Workstation — virtual lab with domain controller + clients
 
 ## What I Built / Implemented
-- Configured Windows Server as domain controller (bigguy.local) with AD DS, DNS, DHCP
+- Configured Windows Server 2019 as domain controller (bigguy.local) with AD DS, DNS, DHCP
 - Created users/groups in AD DS (shareduser, restricteduser1)
-- Joined Linux Mint clients to the domain using realmd and SSSD
-- Configured SSSD.conf for identity, authentication, access, and selective filtering
+- Joined Linux Mint clients (Mint 1 & Mint 2) to the domain using realmd + SSSD
+- Configured SSSD.conf for identity, authentication, access filtering, home dir mapping, and selective user allow-list
 - Edited lightdm.conf for manual login and no guest access
-- Joined Windows 10 client to the domain and disabled cached logons
-- Verified SSO logins, password sync, Kerberos tickets, and selective access (restricteduser1 denied on Mint 2)
+- Joined Windows 10 client to the domain and disabled cached logons via registry
+- Verified SSO logins, Kerberos tickets (klist), password sync, and selective access (restricteduser1 denied on Mint 2)
 - Documented full setup, configs, troubleshooting (DNS, time sync, firewall, realm join issues)
 
 ## Setup Guide
@@ -62,8 +59,8 @@ Quick overview:
 - DNS resolving correctly on Linux (nslookup bigguy.local)
 
 ## Challenges & Resolutions
-- DNS/time sync issues → Configured NTP and DNS to point to domain controller
-- Realm join failures → Fixed firewall, resolv.conf, and package dependencies
+- DNS/time sync issues → Configured DNS and NTP to point to domain controller
+- Realm join failures → Fixed resolv.conf, firewall, and package dependencies
 - Selective access on Mint 2 → Used simple_allow_users in SSSD.conf
 - Cached logons on Windows 10 → Disabled via registry (CachedLogonsCount = 0)
 
@@ -71,4 +68,4 @@ Quick overview:
 - `docs/` → Problem statement, setup guide, configs, proposal PDF
 - `README.md` → Project overview and documentation
 
-This repo showcases my hands-on experience with Windows/Linux integration, AD DS administration, SSSD configuration, Kerberos authentication, domain join troubleshooting, and virtualization lab setup.
+This repo demonstrates my ability to integrate Windows and Linux systems, configure AD DS, set up SSSD for domain authentication, handle Kerberos and LDAP, troubleshoot hybrid environments, and document complex projects clearly — skills directly relevant to junior systems/network admin or infrastructure roles.
