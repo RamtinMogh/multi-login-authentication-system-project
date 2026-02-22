@@ -105,6 +105,14 @@ Restart services:
 sudo systemctl restart sssd
 sudo systemctl restart lightdm
 ```
+Full file: [configs/lightdm.conf](../configs/lightdm.conf)
+
+Key settings:
+- greeter-show-manual-login = true (shows username field)
+- allow-guest = false (disables guest login)
+- allow-user-switching = true (allows switching users)
+
+
 
 Test login with shareduser@bigguy.local
 
