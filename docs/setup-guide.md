@@ -88,6 +88,8 @@ Save and exit the editor.
 
 Note: For Linux Mint 2 (selective access), do not include restricteduser1@bigguy.local in simple_allow_users.
 
+Configure /etc/sssd/sssd.conf — full file: [configs/sssd.conf](../configs/sssd.conf)
+
 Edit /etc/lightdm/lightdm.conf:
 ```ini
 [Seat:*]
